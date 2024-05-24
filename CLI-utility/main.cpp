@@ -6,6 +6,8 @@
 #include <boost/beast.hpp>
 #include <boost/lexical_cast.hpp>
 
+#include "../Package compare lib/lib.hpp"
+
 using namespace boost::beast;
 using namespace boost::asio;
 
@@ -33,7 +35,7 @@ read_large_response_body(
 std::string
 request_packages_from_branch(std::string branch) {
     const std::string host = "rdb.altlinux.org";
-    const std::string path = "/api/export/branch_binary_packages/" + branch;
+    const std::string path = "/api/export/branch_binary_packages/" + branch; //+ "?arch=x86_64";
     const std::string port = "443";
 
     io_service service;
@@ -66,9 +68,9 @@ int main( int argc, char* argv[] ) {
         std::cout << "Enter second branch: ";
         std::cin >> secondBranch;
 
-        // request_packages_from_branch(firstBranch);
-        // request_packages_from_branch(secondBranch);
-
+        std::string x = request_packages_from_branch(firstBranch);
+        std::string y = request_packages_from_branch(secondBranch);
+        compare_branches(std::move(x),std::move(y));
         /*
         TODO:
 

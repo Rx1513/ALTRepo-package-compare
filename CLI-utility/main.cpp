@@ -58,8 +58,8 @@ request_packages_from_branch(std::string branch) {
 
 int main( int argc, char* argv[] ) {
     while (true) {
-        std::string firstBranch,
-                    secondBranch;
+        std::string firstBranch;
+        std::string secondBranch;
 
         std::cout << "Enter first branch: ";
         std::cin >> firstBranch;
@@ -81,7 +81,7 @@ int main( int argc, char* argv[] ) {
         }
         */
 
-        std::cout << "Do you want to make another comparison? [y/N] ";
+        std::cout << "Do you want to make another comparison? [y/n] ";
         std::string userInput;
         std::cin >> userInput;
         if (userInput[0] != 'y' && userInput[0] != 'Y') {

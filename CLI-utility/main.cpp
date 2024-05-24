@@ -70,18 +70,8 @@ int main( int argc, char* argv[] ) {
 
         std::string x = request_packages_from_branch(firstBranch);
         std::string y = request_packages_from_branch(secondBranch);
-        compare_branches(std::move(x),std::move(y));
-        /*
-        TODO:
-
         
-        Some confdition that checks succes of requests
-        {
-            some_shared_library_function_that_compares_two_branches_and_returns_JSON
-        } else {
-            Tell user about error
-        }
-        */
+        std::cout << compare_branches(std::move(x),std::move(y), std::move(firstBranch), std::move(secondBranch));
 
         std::cout << "Do you want to make another comparison? [y/n] ";
         std::string userInput;

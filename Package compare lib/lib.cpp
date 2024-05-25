@@ -27,7 +27,7 @@ void push_package_to_given_list(std::string list_name, object& result_json, obje
     array& package_array = result_json.at("package_list").as_array();
     for (value& package_list_json_object : package_array)
     {
-        object package_list = package_list_json_object.as_object();
+        object& package_list = package_list_json_object.as_object();
         if(package_list.at("arch") == package.at("arch")){
             if(package_list.find(list_name) == package_list.end())
             {

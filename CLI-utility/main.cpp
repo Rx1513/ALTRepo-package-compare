@@ -8,20 +8,23 @@
 
 #include "../Package compare lib/lib.hpp"
 
+
 using namespace boost::beast;
 using namespace boost::asio;
+
 
 template<
     class SyncReadStream,
     class DynamicBuffer,
-    bool isRequest, class Body, class Allocator>
+    bool isRequest, class Body, class Allocator
+>
 void
-read_large_response_body(
+readLargeResponseBody(
     SyncReadStream& stream,
     DynamicBuffer& buffer,
     http::message<isRequest, Body, http::basic_fields<Allocator>>& message,
-    std::size_t bodyLimit)
-{
+    std::size_t bodyLimit
+){
     http::parser<isRequest, Body, Allocator> parser(std::move(message));
     
     parser.eager(true);
@@ -32,10 +35,12 @@ read_large_response_body(
     message = parser.release();
 }
 
+
 std::string
-request_packages_from_branch(std::string branch) {
+requestPackagesFromBranch(std::string branch)
+{
     const std::string host = "rdb.altlinux.org";
-    const std::string path = "/api/export/branch_binary_packages/" + branch; //+ "?arch=x86_64";
+    const std::string path = "/api/export/branch_binary_packages/" + branch;
     const std::string port = "443";
 
     io_service service;
@@ -43,22 +48,29 @@ request_packages_from_branch(std::string branch) {
     ssl::context context(ssl::context::sslv23_client);
     ssl::stream<ip::tcp::socket> ssocket = { service, context };
     ip::tcp::resolver resolver(service);
+
     auto it = resolver.resolve(host, port);
+    
     connect(ssocket.lowest_layer(), it);
+    
     ssocket.handshake(ssl::stream_base::handshake_type::client);
+    
     http::request<http::string_body> request{ http::verb::get, path, 11 };
+    
     request.set(http::field::host, host);
     http::write(ssocket, request);
     http::response<http::string_body> response;
+    
     flat_buffer buffer;
-
-    read_large_response_body(ssocket, buffer, response,80*1024*1024);
+    readLargeResponseBody(ssocket, buffer, response,80*1024*1024);
     std::string response_body = boost::lexical_cast<std::string>(response.body());
 
     return response_body;
 }
 
-int main( int argc, char* argv[] ) {
+
+int main( int argc, char* argv[] )
+{
     while (true) {
         std::string firstBranch;
         std::string secondBranch;
@@ -68,15 +80,22 @@ int main( int argc, char* argv[] ) {
         std::cout << "Enter second branch: ";
         std::cin >> secondBranch;
 
-        std::string x = request_packages_from_branch(firstBranch);
-        std::string y = request_packages_from_branch(secondBranch);
+        std::string firstBranchPackages = requestPackagesFromBranch(firstBranch);
+        std::string secondBranchPackages = requestPackagesFromBranch(secondBranch);
         
-        std::cout << compare_branches(std::move(x),std::move(y), std::move(firstBranch), std::move(secondBranch));
+        std::cout << compareBranches(
+            std::move(firstBranchPackages),
+            std::move(secondBranchPackages),
+            std::move(firstBranch),
+            std::move(secondBranch)
+        );
 
         std::cout << "Do you want to make another comparison? [y/n] ";
         std::string userInput;
         std::cin >> userInput;
-        if (userInput[0] != 'y' && userInput[0] != 'Y') {
+
+        if (userInput[0] != 'y' && userInput[0] != 'Y')
+        {
             std::cout << "Canceled." << std::endl;
             break;
         }

@@ -1,89 +1,136 @@
 #include "lib.hpp"
-#include <iostream>
 #include <boost/json/src.hpp>
 #include <cstdio>
-#include <iostream>
 #include <memory>
 #include <stdexcept>
-#include <string>
 #include <array>
 
-std::string exec(const char* cmd) {
+
+using namespace boost;
+
+
+std::string
+exec(
+    const char* cmd
+){
     std::array<char, 128> buffer;
     std::string result;
     std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-    if (!pipe) {
+
+    if (!pipe)
+    {
         throw std::runtime_error("popen() failed!");
     }
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
+    {
         result += buffer.data();
     }
+
     return result;
 }
 
-using namespace boost::json;
 
-void push_package_to_given_list(std::string list_name, object& result_json, object package){
-    array& package_array = result_json.at("package_list").as_array();
-    for (value& package_list_json_object : package_array)
+void
+pushPackageToGivenList(
+    const std::string&& listName,
+    json::object& outputJSON,
+    const json::object package
+){
+    json::array& packageList = outputJSON.at("package_list").as_array();
+
+    for (json::value& packageListObject : packageList)
     {
-        object& package_list = package_list_json_object.as_object();
-        if(package_list.at("arch") == package.at("arch")){
-            if(package_list.find(list_name) == package_list.end())
+        json::object& givenPackageList = packageListObject.as_object();
+
+        if(givenPackageList.at("arch") == package.at("arch"))
+        {
+            if(givenPackageList.find(listName) == givenPackageList.end())
             {
-                package_list.emplace( list_name, array{ package } );
+                givenPackageList.emplace( listName, json::array{ package } );
                 return;
             }
-            package_list.at(list_name).as_array().push_back(package);
+            givenPackageList.at(listName).as_array().push_back(package);
             return;
         }
     }
-    package_array.push_back(
+
+    packageList.push_back(
         {
             { "arch", package.at("arch") },
-            { list_name, array{ package } }
-        });
+            { listName, json::array{ package } }
+        }
+    );
 }
 
-bool compare_version(const object& first_package,const object& second_package)
-{
-    std::string commad = std::string("rpmvercmp ") + 
-    std::to_string(first_package.at("epoch").as_int64()) + ':'  + value_to<std::string>(first_package.at("version")) + '-'  + value_to<std::string>(first_package.at("release"))
+
+bool
+comparePackageVersion(
+    const json::object& firstPackage,
+    const json::object& secondPackage
+){
+    std::string commad = std::string("rpmvercmp ") +  // Utility to compare branches
+
+    std::to_string(firstPackage.at("epoch").as_int64()) + ':'  // First package version
+    + json::value_to<std::string>(firstPackage.at("version")) + '-'  
+    + json::value_to<std::string>(firstPackage.at("release"))
+    
     + ' ' + 
-    std::to_string(second_package.at("epoch").as_int64()) + ':'  + value_to<std::string>(second_package.at("version")) + '-'  + value_to<std::string>(second_package.at("release"));
+
+    std::to_string(secondPackage.at("epoch").as_int64()) + ':' // Second package version
+    + json::value_to<std::string>(secondPackage.at("version")) + '-' 
+    + json::value_to<std::string>(secondPackage.at("release"));
+
     return std::stoi(exec(commad.c_str())) > 0;
 }
 
-std::string compare_branches(
-    std::string first_branch_packages, 
-    std::string second_branch_packages,
-    std::string first_branch,
-    std::string second_branch
-    )
-{
-    array first_branch_json_packages = parse(first_branch_packages).as_object().at("packages").as_array();
-    array second_branch_json_packages = parse(second_branch_packages).as_object().at("packages").as_array();
+
+std::string
+compareBranches(
     
-    object result_json = { 
-        { "package_list", array() },
-        { "first_branch", first_branch },
-        { "second_branch", second_branch}
+    const std::string&& firstBranchPackages, 
+    const std::string&& secondBranchPackages,
+    const std::string&& firstBranch,
+    const std::string&& secondBranch
+){
+    // Parsing list of packages fiven by altrepo server
+    const json::array firstBranchPackageList = json::parse(firstBranchPackages).as_object().at("packages").as_array();
+    const json::array secondBranchPackageList = json::parse(secondBranchPackages).as_object().at("packages").as_array();
+    
+    // Output JSON
+    json::object outputJSON = { 
+        { "package_list", json::array() },
+        { "first_branch", firstBranch },
+        { "second_branch", secondBranch}
     };
-    std::size_t last_second_index = 0; 
-    
-    for (std::size_t first_package_index = 0; first_package_index < first_branch_json_packages.size(); ++first_package_index)
-    {
-        object& first_package = first_branch_json_packages[first_package_index].as_object();
+
+    /*
+        Index used to skip checking packages that are above first package
+        Since all packages are sorted alphabetically it's unnecessary
+        to check package above last found package
+    */
+    std::size_t lastSecondIndex = 0;
+    for (
+        std::size_t firstPackageIndex = 0;
+        firstPackageIndex < firstBranchPackageList.size();
+        ++firstPackageIndex
+    ){
+        const json::object& firstPackage = firstBranchPackageList[firstPackageIndex].as_object();
+        
         bool first_package_not_found = true;
-        for (std::size_t second_package_index = last_second_index; second_package_index < second_branch_json_packages.size(); ++second_package_index)
-        {
-            object& second_package = second_branch_json_packages[second_package_index].as_object();
+        for (
+            std::size_t secondPackageIndex = lastSecondIndex;
+            secondPackageIndex < secondBranchPackageList.size();
+            ++secondPackageIndex
+        ){
+            const json::object& secondPackage = secondBranchPackageList[secondPackageIndex].as_object();
 
             /*
                 TODO:
-                Modify condition for names
+                Modify condition for package names
             */
-            if ( first_package.at("arch").as_string()[0] < second_package.at("arch").as_string()[0] ) { break; }
+
+            if ( firstPackage.at("arch").as_string()[0] < secondPackage.at("arch").as_string()[0] ) { break; }
 
             /*
                 if names of packages are equal, then push all second branch packages 
@@ -92,28 +139,41 @@ std::string compare_branches(
                 and at the end compare package versions
             */ 
 
-            if( first_package.at("name") == second_package.at("name") && first_package.at("arch") == second_package.at("arch"))
-            {
+            if(
+                firstPackage.at("name") == secondPackage.at("name")
+                &&
+                firstPackage.at("arch") == secondPackage.at("arch")
+            ){
                 first_package_not_found = false;
-                for (std::size_t i = last_second_index; i < second_package_index; ++i)
+                for (std::size_t i = lastSecondIndex; i < secondPackageIndex; ++i)
                 {
-                    push_package_to_given_list("packages_presented_only_in_second_branch",result_json,second_package);
+                    pushPackageToGivenList(
+                        "packages_presented_only_in_second_branch",
+                        outputJSON,
+                        secondPackage
+                    );
                 }
-                last_second_index = second_package_index + 1;
-                if(compare_version(first_package,second_package)) {
-                    push_package_to_given_list("packages_with_bigger_version_in_first_branch",result_json,second_package);
+                lastSecondIndex = secondPackageIndex + 1;
+                if(comparePackageVersion(firstPackage,secondPackage)) {
+                    pushPackageToGivenList(
+                        "packages_with_bigger_version_in_first_branch",
+                        outputJSON,
+                        secondPackage
+                    );
                 };
-                // compare versions
                 break;
             }
         }
 
         if (first_package_not_found)
         {
-            push_package_to_given_list("packages_presented_only_in_first_branch",result_json,first_package);
+            pushPackageToGivenList(
+                "packages_presented_only_in_first_branch",
+                outputJSON,
+                firstPackage
+            );
         }
     }
 
-    std::cout << result_json << std::endl;
-    return "";
+    return serialize(outputJSON);
 };

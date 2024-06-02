@@ -85,6 +85,6 @@ The output JSON is:
     }
   ], 
   "first_branch": "string",
-  "second_branch", secondBranch
+  "second_branch", "string"
 }
 ```

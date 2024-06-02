@@ -29,10 +29,15 @@ $ g++ -user/lib -Wall -o pkgcmp CLI-utility/main.cpp -l:libpckcmp.so.1 -lboost_s
 Place "pkgcmp" file in usr/bin directory.
 
 **Utility usage**
+
 Open command line and write "pkgcmp".
+
 Next enter branches you want to compare.
+
 Wait until package lists will be compared.
+
 The output JSON is:
+
 ```JSON
 {
   "package_list": [

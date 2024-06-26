@@ -90,7 +90,7 @@ int main( int argc, char* argv[] )
             std::move(secondBranch)
         );
 
-        std::cout << "Do you want to make another comparison? [y/n] ";
+        std::cout << "Do you want to make another comparison? [y/n] " << std::endl;
         std::string userInput;
         std::cin >> userInput;
 

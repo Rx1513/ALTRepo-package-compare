@@ -1,33 +1,40 @@
 **Library compilation**
 
 Required packages:
-```
-boost-devel
-boost-asio-devel
+```bash
+$ apt-get install boost-devel boost-asio-devel librpm-devel
 ```
 Generate object file from source code:
 ```bash
-$ g++ -fPIC -g -c -Wall Package\ compare\ lib/lib.cpp
+$ g++ -I/usr/include/rpm/ -fPIC -g -c -Wall Package\ compare\ lib/lib.cpp
 ```
+
+Note that "/usr/include/rpm/" is a standart directory for librmp headers. If you have different installation path for librpm then you should manually replace "-I/usr/include/rpm/" with this path.
+
 Compile object file to a shared library:
 ```bash
-$ g++ -shared -Wl,-soname,libpckcmp.so.1 -o libpckcmp.so.1.0 lib.o -lc
+$ g++ -shared -Wl,-soname,libpkgcmp.so.1 -o libpkgcmp.so.1.0 lib.o -lc
 ```
 **Library instalation**
 
-Place "libpckcmp.so.1.0" in usr/lib directory. Create symbolic link to "libpckcmp.so.1.0". Name it "libpckcmp.so.1" and run:
+Run:
 ```bash
-# /sbin/ldconfig -n /usr/lib/
+# mv libpkgcmp.so.1.0 /usr/lib64/
+ln -s /usr/lib64/libpkgcmp.so.1.0 /usr/lib64/libpkgcmp.so.1
+/sbin/ldconfig -n /usr/lib64/
 ```
 **Utility compilaton**
 
 Run the command below: 
 ```bash
-$ g++ -user/lib -Wall -o pkgcmp CLI-utility/main.cpp -l:libpckcmp.so.1 -lboost_system -lssl -lcrypto -pthread
+$ g++ -Wall -o pkgcmp CLI-utility/main.cpp -l:libpkgcmp.so.1 -lboost_system -lssl -lcrypto -pthread -lrpmbuild -lrpm -lrpmio -lpopt
 ```
+
 **Utility installation**
 
-Place "pkgcmp" file in usr/bin directory.
+```bash
+# mv pkgcmp /usr/bin
+```
 
 **Utility usage**
 

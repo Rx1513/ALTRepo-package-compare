@@ -4,31 +4,9 @@
 #include <memory>
 #include <stdexcept>
 #include <array>
-
+#include "rpmvercmp.h"
 
 using namespace boost;
-
-
-std::string
-exec(
-    const char* cmd
-){
-    std::array<char, 128> buffer;
-    std::string result;
-    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-
-    if (!pipe)
-    {
-        throw std::runtime_error("popen() failed!");
-    }
-
-    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr)
-    {
-        result += buffer.data();
-    }
-
-    return result;
-}
 
 
 void
@@ -69,19 +47,21 @@ comparePackageVersion(
     const json::object& firstPackage,
     const json::object& secondPackage
 ){
-    std::string commad = std::string("rpmvercmp ") +  // Utility to compare branches
 
-    std::to_string(firstPackage.at("epoch").as_int64()) + ':'  // First package version
-    + json::value_to<std::string>(firstPackage.at("version")) + '-'  
-    + json::value_to<std::string>(firstPackage.at("release"))
+    std::string firstPackageVersion = 
+    std::to_string(firstPackage.at("epoch").as_int64())
+    + ':'
+    + json::value_to<std::string>(firstPackage.at("version"))
+    + '-'  
+    + json::value_to<std::string>(firstPackage.at("release"));
     
-    + ' ' + 
-
-    std::to_string(secondPackage.at("epoch").as_int64()) + ':' // Second package version
-    + json::value_to<std::string>(secondPackage.at("version")) + '-' 
+    std::string secondPackageVersion = std::to_string(secondPackage.at("epoch").as_int64())
+    + ':'
+    + json::value_to<std::string>(secondPackage.at("version"))
+    + '-' 
     + json::value_to<std::string>(secondPackage.at("release"));
 
-    return std::stoi(exec(commad.c_str())) > 0;
+    return rpmvercmp(firstPackageVersion.c_str(),secondPackageVersion.c_str()) > 0;
 }
 
 

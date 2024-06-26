@@ -130,10 +130,12 @@ compareBranches(
                     pushPackageToGivenList(
                         "packages_presented_only_in_second_branch",
                         outputJSON,
-                        secondPackage
+                        secondBranchPackageList[i].as_object()
                     );
                 }
+
                 lastSecondIndex = secondPackageIndex + 1;
+                
                 if(comparePackageVersion(firstPackage,secondPackage)) {
                     pushPackageToGivenList(
                         "packages_with_bigger_version_in_first_branch",

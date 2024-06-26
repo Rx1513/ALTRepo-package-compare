@@ -13,7 +13,7 @@ Compile object file to a shared library:
 ```bash
 $ g++ -shared -Wl,-soname,libpckcmp.so.1 -o libpckcmp.so.1.0 lib.o -lc
 ```
-**Library instalдation**
+**Library instalation**
 
 Place "libpckcmp.so.1.0" in usr/lib directory. Create symbolic link to "libpckcmp.so.1.0". Name it "libpckcmp.so.1" and run:
 ```bash
@@ -86,6 +86,6 @@ The output JSON is:
     }
   ], 
   "first_branch": "string",
-  "second_branch", "string"
+  "second_branch": "string"
 }
 ```

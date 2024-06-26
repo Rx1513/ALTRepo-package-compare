@@ -83,6 +83,8 @@ int main( int argc, char* argv[] )
         std::string firstBranchPackages = requestPackagesFromBranch(firstBranch);
         std::string secondBranchPackages = requestPackagesFromBranch(secondBranch);
         
+        std::cout << "Response received" << std::endl; 
+        
         std::cout << compareBranches(
             std::move(firstBranchPackages),
             std::move(secondBranchPackages),

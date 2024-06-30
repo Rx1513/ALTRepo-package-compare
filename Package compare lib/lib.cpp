@@ -54,7 +54,7 @@ comparePackageVersion(
     + json::value_to<std::string>(firstPackage.at("version"))
     + '-'  
     + json::value_to<std::string>(firstPackage.at("release"));
-    
+
     std::string secondPackageVersion = std::to_string(secondPackage.at("epoch").as_int64())
     + ':'
     + json::value_to<std::string>(secondPackage.at("version"))
@@ -67,7 +67,6 @@ comparePackageVersion(
 
 std::string
 compareBranches(
-    
     const std::string&& firstBranchPackages, 
     const std::string&& secondBranchPackages,
     const std::string&& firstBranch,
@@ -76,7 +75,7 @@ compareBranches(
     // Parsing list of packages fiven by altrepo server
     const json::array firstBranchPackageList = json::parse(firstBranchPackages).as_object().at("packages").as_array();
     const json::array secondBranchPackageList = json::parse(secondBranchPackages).as_object().at("packages").as_array();
-    
+
     // Output JSON
     json::object outputJSON = { 
         { "package_list", json::array() },
@@ -96,7 +95,7 @@ compareBranches(
         ++firstPackageIndex
     ){
         const json::object& firstPackage = firstBranchPackageList[firstPackageIndex].as_object();
-        
+
         bool first_package_not_found = true;
         for (
             std::size_t secondPackageIndex = lastSecondIndex;

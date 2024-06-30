@@ -26,12 +26,12 @@ readLargeResponseBody(
     std::size_t bodyLimit
 ){
     http::parser<isRequest, Body, Allocator> parser(std::move(message));
-    
+
     parser.eager(true);
     parser.body_limit(bodyLimit);
-    
+
     http::read(stream, buffer, parser);
-    
+
     message = parser.release();
 }
 
@@ -50,17 +50,17 @@ requestPackagesFromBranch(std::string branch)
     ip::tcp::resolver resolver(service);
 
     auto it = resolver.resolve(host, port);
-    
+
     connect(ssocket.lowest_layer(), it);
-    
+
     ssocket.handshake(ssl::stream_base::handshake_type::client);
-    
+
     http::request<http::string_body> request{ http::verb::get, path, 11 };
-    
+
     request.set(http::field::host, host);
     http::write(ssocket, request);
     http::response<http::string_body> response;
-    
+
     flat_buffer buffer;
     readLargeResponseBody(ssocket, buffer, response,80*1024*1024);
     std::string response_body = boost::lexical_cast<std::string>(response.body());
@@ -83,7 +83,7 @@ int main( int argc, char* argv[] )
         std::string firstBranchPackages = requestPackagesFromBranch(firstBranch);
         std::string secondBranchPackages = requestPackagesFromBranch(secondBranch);
         
-        std::cout << "Response received" << std::endl; 
+        std::cout << "Response received" << std::endl;
         
         std::cout << compareBranches(
             std::move(firstBranchPackages),

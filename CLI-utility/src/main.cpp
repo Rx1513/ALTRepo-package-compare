@@ -6,7 +6,7 @@
 #include <boost/beast.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "../Package compare lib/lib.hpp"
+#include <lib.hpp>
 
 
 using namespace boost::beast;

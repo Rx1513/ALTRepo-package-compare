@@ -1,4 +1,2 @@
-*.out
-pkgcmp
-*.o
+build/
 /.vscode

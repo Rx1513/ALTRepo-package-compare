@@ -47,21 +47,21 @@ comparePackageVersion(
     const json::object& firstPackage,
     const json::object& secondPackage
 ){
-
-    std::string firstPackageVersion = 
-    std::to_string(firstPackage.at("epoch").as_int64())
-    + ':'
-    + json::value_to<std::string>(firstPackage.at("version"))
-    + '-'  
-    + json::value_to<std::string>(firstPackage.at("release"));
-
-    std::string secondPackageVersion = std::to_string(secondPackage.at("epoch").as_int64())
-    + ':'
-    + json::value_to<std::string>(secondPackage.at("version"))
-    + '-' 
-    + json::value_to<std::string>(secondPackage.at("release"));
-
-    return rpmvercmp(firstPackageVersion.c_str(),secondPackageVersion.c_str()) > 0;
+    int comparison_result = rpmvercmp(
+        std::to_string(firstPackage.at("epoch").as_int64()).c_str(),
+        std::to_string(secondPackage.at("epoch").as_int64()).c_str()
+    );
+    if (comparison_result != 0) return comparison_result > 0;
+    comparison_result = rpmvercmp(
+        json::value_to<std::string>(firstPackage.at("version")).c_str(),
+        json::value_to<std::string>(secondPackage.at("version")).c_str()
+    );
+    if (comparison_result != 0) return comparison_result > 0;
+        comparison_result = rpmvercmp(
+        json::value_to<std::string>(firstPackage.at("release")).c_str(),
+        json::value_to<std::string>(secondPackage.at("release")).c_str()
+    );
+    return comparison_result > 0;
 }
 
 

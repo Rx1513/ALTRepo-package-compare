@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include <boost/asio.hpp>
@@ -85,14 +86,20 @@ int main( int argc, char* argv[] )
         
         std::cout << "Response received" << std::endl;
         
-        std::cout << compareBranches(
+        std::string result = compareBranches(
             std::move(firstBranchPackages),
             std::move(secondBranchPackages),
             std::move(firstBranch),
             std::move(secondBranch)
         );
 
-        std::cout << "Do you want to make another comparison? [y/n] " << std::endl;
+        std::cout << result << std::endl;
+
+        std::ofstream resultFile("result.json");
+        resultFile << result;
+        resultFile.close();
+
+        std::cout << "Do you want to make another comparison? [y/n] ";
         std::string userInput;
         std::cin >> userInput;
 

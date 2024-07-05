@@ -1,10 +1,5 @@
 #include "lib.hpp"
-#include <boost/json/src.hpp>
-#include <cstdio>
-#include <memory>
-#include <stdexcept>
-#include <array>
-#include "rpmvercmp.h"
+#include "private_include.hpp"
 
 using namespace boost;
 

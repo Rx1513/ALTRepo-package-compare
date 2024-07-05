@@ -102,7 +102,7 @@ The output JSON is:
   "second_branch": "string"
 }
 ```
-***Library test***
+**Library test**
 
 Run from project root directory:
 ```bash

@@ -1,47 +1,53 @@
-**Library compilation**
+**Requirements**
 
+cmake 3.10.0 or older.\
+gcc 13.2.1 or older.\
 Required packages:
 ```bash
 $ apt-get install boost-devel boost-asio-devel librpm-devel
 ```
-Generate object file from source code:
+And additionl package for testing:
 ```bash
-$ g++ -I/usr/include/rpm/ -fPIC -g -c -Wall Package\ compare\ lib/lib.cpp
+$ apt-get install libgtest-devel
 ```
 
-Note that "/usr/include/rpm/" is a standart directory for librmp headers. If you have different installation path for librpm then you should manually replace "-I/usr/include/rpm/" with this path.
+**Library and utility compilation**
 
-Compile object file to a shared library:
+Compilation:
 ```bash
-$ g++ -shared -Wl,-soname,libpkgcmp.so.1 -o libpkgcmp.so.1.0 lib.o -lc
+$ mkdir build
+cd build/
+cmake ..
+cmake --build .
 ```
-**Library instalation**
+
+Note that by default path to librpm is set to "/usr/include/rpm/". If you have different librpm installation path then you can specify your path by running:
+``$ cmake .. -DPATH_TO_LIBRPM=<Your path>``
+
+***Library and utility installation***
 
 Run:
 ```bash
-# mv libpkgcmp.so.1.0 /usr/lib64/
-ln -s /usr/lib64/libpkgcmp.so.1.0 /usr/lib64/libpkgcmp.so.1
-/sbin/ldconfig -n /usr/lib64/
-```
-**Utility compilaton**
-
-Run the command below: 
-```bash
-$ g++ -Wall -o pkgcmp CLI-utility/main.cpp -l:libpkgcmp.so.1 -lboost_system -lssl -lcrypto -pthread -lrpmbuild -lrpm -lrpmio -lpopt
+# cmake --install .
+/sbin/ldconfig
 ```
 
-**Utility installation**
+If you don't need to install both library and utility then you can specify what component you want to install by running: ``cmake --install . --component <component>``
 
+Proided components are the following:\
+  library - shared libraries with header file.\
+  utility - utlity executable.
+
+Example of library installation:
 ```bash
-# mv pkgcmp /usr/bin
+# cmake --install . --component library
+/sbin/ldconfig
 ```
 
 **Utility usage**
 
-Open command line and write "pkgcmp".
-
-Next enter branches you want to compare.
-
+Open command line and write "pkgcmp".\
+Next enter branches you want to compare.\
 Wait until package lists will be compared.
 
 The output JSON is:
@@ -95,4 +101,13 @@ The output JSON is:
   "first_branch": "string",
   "second_branch": "string"
 }
+```
+***Library test***
+
+Run from project root directory:
+```bash
+$  mkdir Package-compare-lib/build | cd Package-compare-lib/build
+cmake .. -DENABLE_TEST=ON
+cmake --build .
+./test_lib
 ```

@@ -51,7 +51,7 @@ The output JSON is:
   "package_list": [
     {
       "arch": "string",
-      "packages_presented_only_in_second_branch":
+      "packages_presented_only_in_first_branch":
       [
         {
           "name": "string",

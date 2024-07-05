@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.7.1)
+cmake_minimum_required(VERSION 3.10.0)
 
 set(PATH_TO_LIBRPM /usr/include/rpm/ CACHE PATH "Path to librpm headers")
 
@@ -26,4 +26,38 @@ install(TARGETS ${PROJECT_NAME}
     LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib64
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include
     COMPONENT library
+)
+
+#TESTS
+
+include(GoogleTest)
+
+enable_testing()
+
+add_executable(test_lib
+    tests/test.cpp
+    ${PATH_TO_LIBRPM}/rpmvercmp.h
+)
+
+target_link_libraries(test_lib pthread gtest)
+
+target_include_directories(test_lib PUBLIC src ${PATH_TO_LIBRPM})
+
+target_link_libraries(test_lib pkgcmp rpm rpmbuild popt)
+target_compile_options(test_lib PRIVATE -pthread -lrmpio)
+
+add_library(
+    lib_cpp STATIC
+    src/lib.cpp
+    ${PATH_TO_LIBRPM}/rpmvercmp.h
+)
+
+target_link_libraries(lib_cpp pthread gtest)
+
+target_link_libraries(test_lib lib_cpp)
+target_include_directories(lib_cpp PUBLIC src ${PATH_TO_LIBRPM})
+
+
+gtest_add_tests(
+    TARGET test_lib
 )

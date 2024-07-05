@@ -8,7 +8,6 @@
 
 using namespace boost;
 
-
 void
 pushPackageToGivenList(
     const std::string&& listName,
@@ -57,7 +56,7 @@ comparePackageVersion(
         json::value_to<std::string>(secondPackage.at("version")).c_str()
     );
     if (comparison_result != 0) return comparison_result > 0;
-        comparison_result = rpmvercmp(
+    comparison_result = rpmvercmp(
         json::value_to<std::string>(firstPackage.at("release")).c_str(),
         json::value_to<std::string>(secondPackage.at("release")).c_str()
     );

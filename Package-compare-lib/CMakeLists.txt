@@ -4,6 +4,8 @@ set(PATH_TO_LIBRPM /usr/include/rpm/ CACHE PATH "Path to librpm headers")
 
 project(pkgcmp VERSION 1.0 DESCRIPTION "Library for comparing packages provided by ALTRepoAPI")
 
+option(ENABLE_TEST "Build test executable instead of shared library" OFF)
+if (NOT ENABLE_TEST)
 add_library(${PROJECT_NAME} SHARED
     src/lib.cpp
     src/lib.hpp
@@ -27,7 +29,7 @@ install(TARGETS ${PROJECT_NAME}
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include
     COMPONENT library
 )
-
+else()
 #TESTS
 
 include(GoogleTest)
@@ -61,3 +63,4 @@ target_include_directories(lib_cpp PUBLIC src ${PATH_TO_LIBRPM})
 gtest_add_tests(
     TARGET test_lib
 )
+endif()

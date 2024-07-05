@@ -6,8 +6,18 @@ add_executable(${PROJECT_NAME}
     src/main.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} pkgcmp boost_system ssl crypto rpm rpmbuild popt)
-target_compile_options(${PROJECT_NAME} PRIVATE -pthread -lrmpio)
+set(SHARED_LIBRARIES_TO_INCLUDE
+  pkgcmp
+  boost_system
+  ssl
+  crypto 
+  rpm
+  rpmbuild
+  popt
+  pthread
+)
+
+target_link_libraries(${PROJECT_NAME} ${SHARED_LIBRARIES_TO_INCLUDE})
 
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
   set_property(CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE "/usr")

@@ -42,12 +42,8 @@ add_executable(test_lib
     ${PATH_TO_LIBRPM}/rpmvercmp.h
 )
 
-target_link_libraries(test_lib pthread gtest)
-
 target_include_directories(test_lib PUBLIC src ${PATH_TO_LIBRPM})
 
-target_link_libraries(test_lib pkgcmp rpm rpmbuild popt)
-target_compile_options(test_lib PRIVATE -pthread -lrmpio)
 
 add_library(
     lib_cpp STATIC
@@ -55,9 +51,17 @@ add_library(
     ${PATH_TO_LIBRPM}/rpmvercmp.h
 )
 
-target_link_libraries(lib_cpp pthread gtest)
+    set(SHARED_LIBRARIES_TO_INCLUDE
+        pkgcmp
+        rpm
+        rpmbuild
+        popt
+        pthread
+    )
 
-target_link_libraries(test_lib lib_cpp)
+    target_link_libraries(test_lib gtest ${SHARED_LIBRARIES_TO_INCLUDE})
+    
+    target_link_libraries(test_lib lib_cpp)
 target_include_directories(lib_cpp PUBLIC src ${PATH_TO_LIBRPM})
 
 

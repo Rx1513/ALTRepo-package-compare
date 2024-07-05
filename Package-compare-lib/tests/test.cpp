@@ -136,7 +136,7 @@ TEST_F(
 
 TEST_F(
     compare_branch,
-    p10_sisyhus_newer_packages_not_presented
+    p10_sisyphus_newer_packages_not_presented
 ){
     const json::array& packagesList = get_p10_sisyphus();
     for (const json::value& arch_value : packagesList)
@@ -148,28 +148,28 @@ TEST_F(
 
 TEST_F(
     compare_branch,
-    p10_sisyhus_dublicates_packages_in_same_list
+    p10_sisyphus_dublicate_packages_in_same_list
 ){
     testForDublicatesInSameList(get_p10_sisyphus());
 }
 
 TEST_F(
     compare_branch,
-    p10_sisyhus_dublicate_packages_in_different_lists
+    p10_sisyphus_dublicate_packages_in_different_lists
 ){
     testForDublicatesInDifferentLists(get_p10_sisyphus());
 }
 
 TEST_F(
     compare_branch,
-    sisyhus_p10_dublicates_packages_in_same_list
+    sisyphus_p10_dublicate_packages_in_same_list
 ){
     testForDublicatesInSameList(get_sisyphus_p10());
 }
 
 TEST_F(
     compare_branch,
-    sisyhus_p10_dublicate_packages_in_different_lists
+    sisyphus_p10_dublicate_packages_in_different_lists
 ){
     testForDublicatesInDifferentLists(get_sisyphus_p10());
 }

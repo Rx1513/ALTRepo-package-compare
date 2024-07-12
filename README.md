@@ -4,7 +4,7 @@ cmake 3.10.0 or older.\
 gcc 13.2.1 or older.\
 Required packages:
 ```bash
-$ apt-get install boost-devel boost-asio-devel librpm-devel
+$ apt-get install boost-devel boost-asio-devel librpm-devel libssl-devel
 ```
 And additionl package for testing:
 ```bash

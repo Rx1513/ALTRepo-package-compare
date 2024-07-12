@@ -1,4 +1,4 @@
-#include "lib.hpp"
+#include "libpkgcmp.hpp"
 #include "private_include.hpp"
 
 using namespace boost;

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "lib.hpp"
+#include "libpkgcmp.hpp"
 #include "private_include.hpp"
 #include <fstream>
 #include <algorithm>

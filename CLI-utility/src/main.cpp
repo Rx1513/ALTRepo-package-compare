@@ -7,7 +7,7 @@
 #include <boost/beast.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include <lib.hpp>
+#include <libpkgcmp.hpp>
 
 
 using namespace boost::beast;

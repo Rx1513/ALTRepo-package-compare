@@ -8,8 +8,8 @@ option(ENABLE_TEST "Build test executable instead of shared library" OFF)
 if (NOT ENABLE_TEST)
 
     add_library(${PROJECT_NAME} SHARED
-        src/lib.cpp
-        src/lib.hpp
+    src/libpkgcmp.cpp
+    src/libpkgcmp.hpp
         ${PATH_TO_LIBRPM}/rpmvercmp.h
     )
 
@@ -17,7 +17,7 @@ if (NOT ENABLE_TEST)
 
     set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
     set_target_properties(${PROJECT_NAME} PROPERTIES SOVERSION ${PROJECT_VERSION_MAJOR})
-    set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER src/lib.hpp)
+    set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER src/libpkgcmp.hpp)
 
     if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
       set_property(CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE "/usr")
@@ -45,7 +45,7 @@ else()
 
     add_library(
         lib_cpp STATIC
-        src/lib.cpp
+        src/libpkgcmp.cpp
         ${PATH_TO_LIBRPM}/rpmvercmp.h
     )
     set(SHARED_LIBRARIES_TO_INCLUDE

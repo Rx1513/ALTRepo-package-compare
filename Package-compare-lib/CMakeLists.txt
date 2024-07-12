@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10.0)
-
+include(GNUInstallDirs)
 set(PATH_TO_LIBRPM /usr/include/rpm/ CACHE PATH "Path to librpm headers")
 
 project(pkgcmp VERSION 1.0 DESCRIPTION "Library for comparing packages provided by ALTRepoAPI")
@@ -24,9 +24,9 @@ if (NOT ENABLE_TEST)
     endif()
     
     install(TARGETS ${PROJECT_NAME}
-        LIBRARY DESTINATION ${CMAKE_INSTALL_PREFIX}/lib64
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT library
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
         COMPONENT library
     )
 else()

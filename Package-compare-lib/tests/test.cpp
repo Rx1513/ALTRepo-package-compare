@@ -2,7 +2,6 @@
 #include "libpkgcmp.hpp"
 #include "private_include.hpp"
 #include <fstream>
-#include <algorithm>
 
 std::string readFile(
     const std::string& fileName

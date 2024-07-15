@@ -10,10 +10,7 @@ set(SHARED_LIBRARIES_TO_INCLUDE
     pkgcmp
     boost_system
     ssl
-    crypto 
-    rpm
-    rpmbuild
-    popt
+    crypto
     pthread
 )
 

@@ -35,8 +35,8 @@ private:
     static const json::array output_for_sisyphus_p10;
 };
 
-const std::string compare_branch::p10_packages = readFile("../tests/p10_package_list.json");
-const std::string compare_branch::sisyphus_packages = readFile("../tests/sisyphus_package_list.json");
+const std::string compare_branch::p10_packages = readFile("p10_package_list.json");
+const std::string compare_branch::sisyphus_packages = readFile("sisyphus_package_list.json");
 const json::array compare_branch::output_for_p10_sisyphus = json::parse(compareBranches(std::move(compare_branch::p10_packages), std::move(compare_branch::sisyphus_packages), "p10", "sysiphus")).as_object().at("package_list").as_array();
 const json::array compare_branch::output_for_sisyphus_p10 = json::parse(compareBranches(std::move(compare_branch::sisyphus_packages), std::move(compare_branch::p10_packages), "p10", "sysiphus")).as_object().at("package_list").as_array();
 

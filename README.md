@@ -106,8 +106,6 @@ The output JSON is:
 
 Run from project root directory:
 ```bash
-$  mkdir Package-compare-lib/build | cd Package-compare-lib/build
-cmake .. -DENABLE_TEST=ON
-cmake --build .
-./test_lib
+$ cd Package-compare-lib/tests/
+../../build/Package-compare-lib/test_lib
 ```

@@ -1,0 +1,22 @@
+object 9c06fe34ed1edf50405fc937e2518e42a3447fb5
+type commit
+tag v1.2
+tagger Sergey Zhidkih <rx1513@altlinux.org> 1721136626 +0300
+
+Version with correct tests.
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEwi1SRH1zEERJGG4SqjrWM2gCV8IFAmaWdpQACgkQqjrWM2gC
+V8L/Pg/+PK1BE3aMx05huifUHacCTs0UnSwJQ3IzrEiq4G6qasmn1Ch0LuB4vzZd
+lTam2G0eSUN7Q4TVOD776RcDJeBg2ZPA1EVxxAF6g45TOdxalKqUf3U/DeBym/9v
+P0T5VgdiVzPcFwUVKHJiLE5x80MTN8LVjIx7w2k58fxMZmGnE6qEcjSK/osdQvmS
+hpdjB8q70ofXqeRlMX4BTYoymFadKdUO+oXvmMb9/RuPPHlQHAkTuGi0XICALEAu
+RRYmc4vPfuxrsd2yrdR4A8ibF9GPLk3w/AWMOnpLayp5vDW6PJcjBA0hYTnty9oS
+VMGXr4ZON3QOJwWw/47XDQlLkU1imYJnDLjAujFQvcHsXjOhX/kHnmr0/vT8uZG1
+1LW1RomDwxmDze9GHVu1XxcrwnVDa/oXjZIB6OtnVlW5W7XzwybwcE+jI8H6qul/
+hUfhjYmLSnnhUI3IDtdVFtywemuvWQ+U5R/fUieLFvlcoNz+jNdJCmr5m720U/5d
+Xb07mheQcgk948FWnOAXIf9oN4llUxhBxj6cZolyfBt2t/fK648/LvvmO+nrq3a2
+h2N7cvP/N9RJjgNeuozvEdqKfd9mGVGKQbrssPApzyaU4gZlCAzZZRK4FCYvPMLk
+ncApRC9PNGIVbreqWddipG3WuSCfSPWCthfCvoMn1wZOqTF9H9M=
+=g9le
+-----END PGP SIGNATURE-----
